@@ -1,12 +1,21 @@
 import { FormEvent, useState } from "react";
 
+import { useDispatch } from "react-redux";
+import { add } from "../store";
+
 export function AddToDo() {
   const [newTodo, setNewTodo] = useState('')
+  const dispatch = useDispatch()
 
   function handleNewTodo(e: FormEvent) {
     e.preventDefault()
 
-    console.log(newTodo);
+    // o dispatch que irá atualizar o estado
+    dispatch(add({
+      newTodo,
+    }))
+
+    setNewTodo('')
   }
 
   return (
@@ -17,7 +26,6 @@ export function AddToDo() {
         value={newTodo}
         onChange={(e) => setNewTodo(e.target.value)}
       />
-
       <button type="submit">Adicionar</button>
     </form>
   );
