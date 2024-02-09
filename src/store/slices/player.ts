@@ -19,14 +19,17 @@ export interface PlayerState {
   course: Course | null;
   currentModuleIndex: number;
   currentLessonIndex: number;
+  isLoading: boolean;
 }
 
 const initialState: PlayerState = {
   course: null,
   currentModuleIndex: 0,
   currentLessonIndex: 0,
+  isLoading: false,
 }
 
+// A grosso modo seria colocar no Redux a chamada da API, uma função async, para ser utilizada em todo o código
 export const loadCourse = createAsyncThunk(
   'player/load',
   async () => {
@@ -62,8 +65,13 @@ export const playerSlice = createSlice({
     }
   },
   extraReducers(builder) {
+    builder.addCase(loadCourse.pending, (state) => {
+      state.isLoading = true
+    })
+
     builder.addCase(loadCourse.fulfilled, (state, action) => {
       state.course = action.payload
+      state.isLoading = false
     })
   },
 })
